@@ -1,0 +1,17 @@
+{
+  "name": "DON'T BLINK Reflex Arcade",
+  "short_name": "DON'T BLINK",
+  "description": "Extreme Reaction Time Challenge Arcade Game",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090a0f",
+  "theme_color": "#090a0f",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

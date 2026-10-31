@@ -1,0 +1,12 @@
+{
+  "name": "dont-blink-arcade",
+  "version": "1.0.0",
+  "description": "DON'T BLINK — Extreme Reaction Time Challenge Arcade Game",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": ["game", "arcade", "reaction-time", "reflexes", "minigame"],
+  "author": "Indie Arcade Dev",
+  "license": "MIT"
+}

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#090a0f">
+  
+  <!-- Primary Meta Tags -->
+  <title>DON'T BLINK — Extreme Reaction Time Arcade</title>
+  <meta name="title" content="DON'T BLINK — Extreme Reaction Time Arcade">
+  <meta name="description" content="Test your optical processing reflexes in the ultimate reaction-time challenge. Play 5 high-stakes rounds, evade deceptive fake flashes, and challenge your friends!">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="DON'T BLINK — Extreme Reflex Reaction Arcade">
+  <meta property="og:description" content="Test your optical processing reflexes in the ultimate reaction-time challenge. Can you beat the human benchmark?">
+  <meta property="og:image" content="/favicon.svg">
+
+  <!-- Twitter Card -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="DON'T BLINK — Extreme Reflex Reaction Arcade">
+  <meta property="twitter:description" content="Test your optical processing reflexes in the ultimate reaction-time challenge.">
+  <meta property="twitter:image" content="/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- =========================================================================
+       Google AdSense Integration
+       Replace 'ca-pub-XXXXXXXXXXXXXXXX' with your Google AdSense Publisher ID.
+       Ensure your site is added to your Google AdSense dashboard under "Sites".
+       ========================================================================= -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+       crossorigin="anonymous"></script>
+</head>
+<body data-theme="cyber">
+
+  <!-- Background Ambient Glow & Scanline FX -->
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <div class="app-container">
+
+    <!-- Top Navigation / Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-logo">
+          <span class="eye-icon">◉</span>
+        </div>
+        <div class="brand-text">
+          <h1 class="game-title">DON'T <span class="accent-text">BLINK</span></h1>
+          <span class="game-subtitle">REFLEX ARCADE</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Challenge notification chip if URL contains challenge -->
+        <div id="challenge-badge" class="challenge-pill hidden" title="Active Rival Challenge">
+          <span class="pulse-dot"></span>
+          <span id="challenge-badge-text">Target: 210ms</span>
+        </div>
+
+        <button id="btn-sound" class="icon-btn" aria-label="Toggle Sound" title="Toggle Sound">
+          <svg id="sound-icon-on" class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <svg id="sound-icon-off" class="svg-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+
+        <button id="btn-theme" class="icon-btn" aria-label="Change Theme" title="Theme Selector">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+          </svg>
+        </button>
+
+        <button id="btn-leaderboard-modal" class="icon-btn" aria-label="View Leaderboard" title="Local Hall of Fame">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+            <path d="M4 22h16"></path>
+            <path d="M10 14.66V17c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-2.34"></path>
+            <path d="M18 14.66V17c0 .55-.45 1-1 1h-2c-.55 0-1-.45-1-1v-2.34"></path>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+          </svg>
+        </button>
+
+        <button id="btn-achievements-modal" class="icon-btn" aria-label="Achievements" title="Achievements">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          <span id="achievement-unread" class="badge-dot hidden"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Challenge Banner (if arriving from shared URL) -->
+    <div id="incoming-challenge-banner" class="rival-banner hidden">
+      <div class="rival-info">
+        <span class="rival-badge">🔥 INCOMING RIVAL CHALLENGE</span>
+        <p class="rival-text"><strong id="challenger-name">Rival</strong> scored <span id="challenger-score" class="rival-highlight">0ms</span>! Can you beat them?</p>
+      </div>
+      <button id="btn-accept-challenge" class="btn-sm btn-accent">Accept Challenge</button>
+    </div>
+
+    <!-- Active Mode Selector Chips -->
+    <nav class="mode-selector" id="mode-selector" aria-label="Game Modes">
+      <button class="mode-chip active" data-mode="classic">
+        <span class="mode-name">Classic 5-Round</span>
+        <span class="mode-tag">Ranked</span>
+      </button>
+      <button class="mode-chip" data-mode="tricky">
+        <span class="mode-name">Tricky Flashes</span>
+        <span class="mode-tag">Deception</span>
+      </button>
+      <button class="mode-chip" data-mode="sudden">
+        <span class="mode-name">Sudden Death</span>
+        <span class="mode-tag">1-Life</span>
+      </button>
+      <button class="mode-chip" data-mode="daily">
+        <span class="mode-name">Daily Seed</span>
+        <span class="mode-tag" id="daily-tag">Today</span>
+      </button>
+    </nav>
+
+    <!-- Quick Stats Bar (Personal Best, Streaks) -->
+    <div class="stats-bar">
+      <div class="stat-pill">
+        <span class="stat-label">Personal Best</span>
+        <span class="stat-value" id="hud-pb">-- ms</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-label">Daily Streak</span>
+        <span class="stat-value" id="hud-streak">0 🔥</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-label">Games Played</span>
+        <span class="stat-value" id="hud-games-count">0</span>
+      </div>
+    </div>
+
+    <!-- MAIN ARENA SCREEN -->
+    <main class="arena-wrapper">
+      
+      <!-- The Interactive Stage (Tappable Area) -->
+      <div id="play-area" class="play-arena state-idle" tabindex="0" role="button" aria-label="Game Arena">
+        
+        <!-- Round Progress Pips (For 5-round modes) -->
+        <div id="round-indicator" class="round-indicator">
+          <div class="round-pip" data-round="1"><span>R1</span></div>
+          <div class="round-pip" data-round="2"><span>R2</span></div>
+          <div class="round-pip" data-round="3"><span>R3</span></div>
+          <div class="round-pip" data-round="4"><span>R4</span></div>
+          <div class="round-pip" data-round="5"><span>R5</span></div>
+        </div>
+
+        <!-- Dynamic Content Inside Arena -->
+        <div class="arena-content">
+          
+          <!-- State: IDLE -->
+          <div id="stage-idle" class="stage-view active">
+            <div class="pulse-ring"></div>
+            <div class="hero-icon">⚡</div>
+            <h2 class="hero-title">READY TO TEST YOUR SPEED?</h2>
+            <p class="hero-desc">When the screen turns <strong class="neon-green">GREEN</strong>, tap as fast as you can. Avoid false starts!</p>
+            <div class="btn-cta-wrapper">
+              <button id="btn-start" class="btn-huge btn-start">
+                <span class="btn-text">START CHALLENGE</span>
+                <span class="btn-subtext">Click or Press SPACE</span>
+              </button>
+            </div>
+            <p class="pro-tip">💡 Pro-Tip: Watch out for fake decoy flashes in Deception mode!</p>
+          </div>
+
+          <!-- State: WAITING (Red/Suspense) -->
+          <div id="stage-waiting" class="stage-view">
+            <div class="heartbeat-radar"></div>
+            <div class="state-icon-huge warning-blink">⏳</div>
+            <h2 class="state-prompt">WAIT FOR GREEN...</h2>
+            <p class="state-warning">DO NOT TAP YET</p>
+            <div class="subtle-timer">Random trigger in 1–5s</div>
+          </div>
+
+          <!-- State: FAKE FLASH (Tricky Decoy) -->
+          <div id="stage-fake" class="stage-view">
+            <div class="state-icon-huge decoy-shake">🛑</div>
+            <h2 class="state-prompt decoy-title" id="fake-title">DON'T TAP!</h2>
+            <p class="state-warning" id="fake-desc">IT'S A TRAP!</p>
+          </div>
+
+          <!-- State: READY / GREEN (The Reflex Moment!) -->
+          <div id="stage-ready" class="stage-view">
+            <div class="state-icon-huge boom-pop">💥</div>
+            <h2 class="state-prompt-huge">CLICK NOW!</h2>
+            <p class="state-react-prompt">TAP AS FAST AS YOU CAN!</p>
+          </div>
+
+          <!-- State: FALSE START -->
+          <div id="stage-false-start" class="stage-view">
+            <div class="state-icon-huge">⚠️</div>
+            <h2 class="state-prompt false-title">FALSE START!</h2>
+            <p class="state-desc" id="false-start-msg">You clicked before it turned green. Calm your trigger finger!</p>
+            <button id="btn-continue-round" class="btn-primary mt-4">
+              <span>Try Round Again</span>
+            </button>
+          </div>
+
+          <!-- State: ROUND RESULT -->
+          <div id="stage-round-result" class="stage-view">
+            <div class="round-score-reveal">
+              <span class="reaction-ms" id="round-ms">0</span>
+              <span class="reaction-unit">ms</span>
+            </div>
+            <div class="reaction-grade" id="round-grade">⚡ Inhuman Reflexes!</div>
+            <p class="round-meta" id="round-comment">"Faster than a blink of an eye."</p>
+            
+            <div class="btn-cta-wrapper mt-4">
+              <button id="btn-next-round" class="btn-primary">
+                <span id="next-round-btn-text">Next Round</span> &rarr;
+              </button>
+            </div>
+            <span class="keyboard-hint">Press SPACE or Tap to continue</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- =====================================================================
+           Google AdSense Unit (Non-intrusive Arena Banner)
+           Positioned safely below the arena to prevent accidental clicks
+           per Google AdSense policies.
+           ===================================================================== -->
+      <section class="ad-unit-wrapper" aria-label="Arcade Sponsor">
+        <div class="ad-unit-label">SPONSORED ARCADE PARTNER</div>
+        <div class="ad-unit-container" id="ad-banner-main">
+          <!-- Live AdSense Responsive Unit -->
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+               data-ad-slot="1234567890"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <!-- Styled Fallback Placeholder when Ads are loading / during local testing -->
+          <div class="ad-placeholder-content">
+            <span class="ad-icon">⚡</span>
+            <div class="ad-copy">
+              <strong>DON'T BLINK ARCADE NETWORK</strong>
+              <span>Support free indie gaming • High-performance reflex benchmarks</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer with AdSense-compliant Policy links -->
+    <footer class="app-footer">
+      <div class="footer-links">
+        <button id="btn-open-privacy" class="footer-link-btn">Privacy Policy</button>
+        <span class="footer-dot">•</span>
+        <button id="btn-open-about" class="footer-link-btn">About & Benchmark Methodology</button>
+        <span class="footer-dot">•</span>
+        <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" class="footer-link-btn">Google Ad Settings</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 DON'T BLINK ARCADE. Powered by Vercel.</p>
+    </footer>
+
+    <!-- FINAL GAME RESULT MODAL / OVERLAY -->
+    <div id="game-over-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-final-title">
+      <div class="modal-card result-card-frame">
+        
+        <div class="result-header">
+          <span class="modal-kicker">CHALLENGE COMPLETE</span>
+          <h2 id="modal-final-title" class="result-title">NEURAL PERFORMANCE</h2>
+          <span id="mode-badge-display" class="badge-mode">CLASSIC 5-ROUND</span>
+        </div>
+
+        <!-- Dramatic Score Showcase -->
+        <div class="result-hero-box">
+          <div class="score-main">
+            <span class="score-label">AVERAGE REACTION</span>
+            <div class="score-number-row">
+              <span class="score-giant" id="final-avg-ms">212</span>
+              <span class="score-ms-tag">ms</span>
+            </div>
+            <div class="new-pb-badge hidden" id="new-pb-badge">🔥 NEW PERSONAL BEST!</div>
+          </div>
+
+          <div class="rank-card">
+            <div class="rank-icon" id="final-rank-icon">🏎️</div>
+            <div class="rank-details">
+              <div class="rank-tier" id="final-rank-tier">TIER S</div>
+              <div class="rank-title" id="final-rank-title">F1 APEX REFLEX</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Human Comparison & Benchmark Pill -->
+        <div class="benchmark-pill">
+          <div class="comparison-icon">🧬</div>
+          <div class="comparison-text">
+            <strong id="final-percentile">Faster than 89%</strong> of human benchmarks
+            <span class="benchmark-source">(Human visual reaction benchmark avg: 273ms)</span>
+          </div>
+        </div>
+
+        <!-- Sassy Comment -->
+        <blockquote class="sassy-quote" id="final-sassy-msg">
+          "Your nervous system is operating on fiber optic speeds."
+        </blockquote>
+
+        <!-- Round by Round Sparkline Breakdown -->
+        <div class="rounds-breakdown">
+          <div class="breakdown-title-row">
+            <span>Round Breakdown</span>
+            <span id="final-consistency">Consistency: ±12ms</span>
+          </div>
+          <div class="rounds-bars" id="rounds-bars-container">
+            <!-- Dynamically generated round pills with ms -->
+          </div>
+        </div>
+
+        <!-- Rival Challenge Result (if challenge was active) -->
+        <div id="rival-comparison-box" class="rival-outcome hidden">
+          <div class="rival-outcome-header">
+            <span>RIVAL DUEL RESULT</span>
+          </div>
+          <div class="rival-outcome-body" id="rival-outcome-text">
+            You beat Alex by 14ms! 🏆
+          </div>
+        </div>
+
+        <!-- Viral Share & Action Grid -->
+        <div class="social-share-section">
+          <div class="share-title">SHARE YOUR SCORE & CHALLENGE FRIENDS</div>
+          
+          <div class="share-actions-grid">
+            <button id="btn-share-whatsapp" class="btn-share btn-whatsapp" title="Share via WhatsApp">
+              <svg class="share-svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.301-.15-1.78-.878-2.056-.978-.276-.101-.477-.15-.678.15-.2.301-.778.978-.954 1.179-.176.2-.351.226-.652.075-.301-.151-1.27-.468-2.42-1.493-.894-.798-1.498-1.784-1.674-2.085-.176-.301-.019-.464.132-.614.136-.135.301-.351.452-.527.15-.176.2-.301.301-.502.101-.2.05-.376-.025-.526-.076-.151-.678-1.632-.93-2.235-.245-.588-.495-.508-.679-.517l-.578-.01c-.2 0-.527.075-.803.376-.276.301-1.054 1.03-1.054 2.512 0 1.482 1.079 2.912 1.23 3.113.15.2 2.123 3.242 5.144 4.547.719.311 1.28.497 1.718.636.722.23 1.379.197 1.9.12.58-.088 1.78-.727 2.03-1.428.252-.702.252-1.303.176-1.428-.075-.125-.276-.2-.577-.351z"/>
+                <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2.05 21.95l4.908-1.287A9.956 9.956 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.17a8.128 8.128 0 0 1-4.148-1.134l-.297-.176-3.082.809.822-3.003-.193-.308A8.138 8.138 0 0 1 3.83 12c0-4.505 3.665-8.17 8.17-8.17 4.505 0 8.17 3.665 8.17 8.17 0 4.505-3.665 8.17-8.17 8.17z"/>
+              </svg>
+              <span>WhatsApp</span>
+            </button>
+
+            <button id="btn-challenge-friend" class="btn-share btn-challenge" title="Generate Battle Link">
+              <svg class="share-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+              <span id="challenge-btn-text">Copy Duel Link</span>
+            </button>
+
+            <button id="btn-download-card" class="btn-share btn-save-card" title="Download High-Res Graphic Card">
+              <svg class="share-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Result Card</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Primary Bottom Actions -->
+        <div class="modal-footer-actions">
+          <button id="btn-rematch" class="btn-huge btn-rematch">
+            <span>REMATCH (SPACE)</span>
+          </button>
+          <button id="btn-close-modal" class="btn-outline">
+            <span>Main Menu</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LEADERBOARD & STATS MODAL -->
+    <div id="leaderboard-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="leaderboard-title">
+      <div class="modal-card">
+        <div class="modal-card-header">
+          <h2 id="leaderboard-title" class="modal-title">🏆 HALL OF FAME</h2>
+          <button class="modal-close-btn" data-close="leaderboard-modal" aria-label="Close modal">&times;</button>
+        </div>
+
+        <div class="lb-tabs">
+          <button class="lb-tab active" data-lb-filter="all">All Records</button>
+          <button class="lb-tab" data-lb-filter="classic">Classic</button>
+          <button class="lb-tab" data-lb-filter="tricky">Deception</button>
+          <button class="lb-tab" data-lb-filter="daily">Daily</button>
+        </div>
+
+        <div class="leaderboard-table-container">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Avg Time</th>
+                <th>Best</th>
+                <th>Mode</th>
+                <th>Rank</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-tbody">
+              <!-- Dynamically populated from localStorage -->
+            </tbody>
+          </table>
+          <div id="leaderboard-empty" class="empty-state hidden">
+            <span class="empty-icon">🎮</span>
+            <p>No runs recorded yet. Finish a 5-round challenge to post your first score!</p>
+          </div>
+        </div>
+
+        <div class="modal-card-footer">
+          <button id="btn-clear-scores" class="btn-text-danger">Clear Local Scores</button>
+          <button class="btn-primary" data-close="leaderboard-modal">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS MODAL -->
+    <div id="achievements-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="achievements-title">
+      <div class="modal-card">
+        <div class="modal-card-header">
+          <h2 id="achievements-title" class="modal-title">🎖️ ACHIEVEMENTS</h2>
+          <button class="modal-close-btn" data-close="achievements-modal" aria-label="Close modal">&times;</button>
+        </div>
+
+        <div class="achievements-summary">
+          <span id="achievements-progress-text">Unlocked: 0 / 8</span>
+          <div class="progress-bar-track">
+            <div id="achievements-progress-fill" class="progress-bar-fill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div class="achievements-grid" id="achievements-grid">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div class="modal-card-footer">
+          <button class="btn-primary" data-close="achievements-modal">Awesome</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- THEME SELECTION MODAL -->
+    <div id="theme-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="theme-title">
+      <div class="modal-card modal-sm">
+        <div class="modal-card-header">
+          <h2 id="theme-title" class="modal-title">🎨 ARCADE THEMES</h2>
+          <button class="modal-close-btn" data-close="theme-modal" aria-label="Close modal">&times;</button>
+        </div>
+
+        <div class="theme-options-grid">
+          <button class="theme-choice active" data-set-theme="cyber">
+            <div class="theme-preview cyber-preview">
+              <span class="dot-green"></span>
+              <span class="dot-red"></span>
+            </div>
+            <span class="theme-label">Cyber Neon</span>
+            <span class="theme-sub">Default</span>
+          </button>
+
+          <button class="theme-choice" data-set-theme="synthwave">
+            <div class="theme-preview synthwave-preview">
+              <span class="dot-cyan"></span>
+              <span class="dot-pink"></span>
+            </div>
+            <span class="theme-label">Synthwave 84</span>
+            <span class="theme-sub">Retro Glow</span>
+          </button>
+
+          <button class="theme-choice" data-set-theme="matrix">
+            <div class="theme-preview matrix-preview">
+              <span class="dot-phosphor"></span>
+              <span class="dot-amber"></span>
+            </div>
+            <span class="theme-label">Matrix Terminal</span>
+            <span class="theme-sub">Hacker CRT</span>
+          </button>
+
+          <button class="theme-choice" data-set-theme="crimson">
+            <div class="theme-preview crimson-preview">
+              <span class="dot-ruby"></span>
+              <span class="dot-white"></span>
+            </div>
+            <span class="theme-label">Blood Crimson</span>
+            <span class="theme-sub">High Stakes</span>
+          </button>
+        </div>
+
+        <div class="modal-card-footer">
+          <button class="btn-primary" data-close="theme-modal">Apply Theme</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRIVACY POLICY MODAL (REQUIRED FOR ADSENSE APPROVAL) -->
+    <div id="privacy-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="privacy-title">
+      <div class="modal-card">
+        <div class="modal-card-header">
+          <h2 id="privacy-title" class="modal-title">🛡️ PRIVACY POLICY</h2>
+          <button class="modal-close-btn" data-close="privacy-modal" aria-label="Close modal">&times;</button>
+        </div>
+
+        <div class="policy-content">
+          <h3>1. Information We Collect</h3>
+          <p>DON'T BLINK is an indie reaction-time challenge. Gameplay data (such as personal bests, round reaction times, and unlocked achievements) is stored locally on your device via HTML5 <code>localStorage</code>. No personal identification data is collected or transmitted to external servers by our game engine.</p>
+
+          <h3>2. Advertising & Third-Party Cookies</h3>
+          <p>This website displays advertisements provided by Google AdSense and third-party advertising networks. Google, as a third-party vendor, uses cookies to serve ads based on your prior visits to this website or other websites.</p>
+          <p>Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to our site and/or other sites on the Internet. You may opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</p>
+
+          <h3>3. Google Policies</h3>
+          <p>To learn more about how Google uses data when you use partner sites, visit <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">Google's Partner Policy</a>.</p>
+        </div>
+
+        <div class="modal-card-footer">
+          <button class="btn-primary" data-close="privacy-modal">Understood</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT & BENCHMARKS MODAL -->
+    <div id="about-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="about-title">
+      <div class="modal-card">
+        <div class="modal-card-header">
+          <h2 id="about-title" class="modal-title">⚡ ABOUT THE ARCADE</h2>
+          <button class="modal-close-btn" data-close="about-modal" aria-label="Close modal">&times;</button>
+        </div>
+
+        <div class="policy-content">
+          <h3>Biological Benchmark Methodology</h3>
+          <p>Human visual reaction time is primarily governed by optical transmission from the retina to the visual cortex, followed by neuromuscular transmission to motor neurons.</p>
+          <p>In our game, percentile comparisons are calculated using empirical biological distribution models: <strong>Mean = 273ms</strong> and <strong>Standard Deviation = 45ms</strong> based on global reaction-time studies and hardware latency baselines.</p>
+          <h3>Display & Input Latency</h3>
+          <p>Measured reaction times include display refresh latency (16.6ms on 60Hz displays, 6.9ms on 144Hz displays) and input polling delays. For maximum performance, use a high refresh-rate display and wired input.</p>
+        </div>
+
+        <div class="modal-card-footer">
+          <button class="btn-primary" data-close="about-modal">Got It</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Floater -->
+    <div id="toast" class="toast-container hidden" role="status" aria-live="polite">
+      <span class="toast-icon" id="toast-icon">✨</span>
+      <span class="toast-message" id="toast-msg">Link copied to clipboard!</span>
+    </div>
+
+  </div>
+
+  <!-- Hidden Canvas for Share Card Export -->
+  <canvas id="share-card-canvas" width="1200" height="675" style="display:none;"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
