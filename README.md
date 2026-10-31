@@ -30,34 +30,6 @@ npx vercel --prod
 
 ---
 
-## 💰 Turning on Google AdSense
-
-To monetize your live game:
-
-### 1. Update your Publisher ID in `index.html`
-Open [index.html](file:///C:/Users/hp/.gemini/antigravity/scratch/dont-blink/index.html) and replace `ca-pub-XXXXXXXXXXXXXXXX` with your official Google AdSense Publisher ID (found in **AdSense > Account > Account information**):
-```html
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID"
-     crossorigin="anonymous"></script>
-```
-Also update the `data-ad-client="ca-pub-YOUR_PUBLISHER_ID"` and `data-ad-slot="YOUR_SLOT_ID"` inside the `<ins class="adsbygoogle">` unit.
-
-### 2. Update `ads.txt`
-Open [ads.txt](file:///C:/Users/hp/.gemini/antigravity/scratch/dont-blink/ads.txt) and replace `pub-XXXXXXXXXXXXXXXX` with your publisher ID:
-```text
-google.com, pub-YOUR_PUBLISHER_ID, DIRECT, f08c47fec0942fa0
-```
-
-### 3. Add Site in Google AdSense Dashboard
-1. Go to **Google AdSense Console > Sites > New Site**.
-2. Enter your Vercel domain (e.g. `dont-blink.vercel.app` or your custom domain).
-3. Google requires:
-   - Visible, non-intrusive ad placement *(already configured safely below the play arena so players never accidentally click ads)*.
-   - A dedicated **Privacy Policy** explaining cookies and third-party ad networks *(already built into the footer modal)*.
-   - Verified `ads.txt` *(already served at `/ads.txt`)*.
-4. Request review! Once approved, live Google Ads will automatically start rendering.
-
----
 
 ## 🎮 Arcade Features
 
