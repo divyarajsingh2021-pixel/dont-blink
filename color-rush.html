@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#090a0f">
+  
+  <title>COLOR RUSH — Optical Reflex Arcade</title>
+  <meta name="title" content="COLOR RUSH — Optical Reflex Arcade">
+  <meta name="description" content="Test your optical vision and color perception speed. Spot the subtle odd tile in the grid before the clock runs out!">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="COLOR RUSH — Can you spot the odd tile?">
+  <meta property="og:description" content="Test your optical rods and cones. Can you reach Level 35+ and unlock Eagle Vision?">
+  <meta property="og:image" content="/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="color-rush.css">
+
+  <!-- Google AdSense Integration -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6998294085796300"
+       crossorigin="anonymous"></script>
+</head>
+<body data-theme="cyber">
+
+  <div class="ambient-glow" aria-hidden="true"></div>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <div class="app-container">
+
+    <!-- Top Navigation / Header -->
+    <header class="app-header">
+      <div class="brand">
+        <a href="/" class="brand-link" title="Arcade Home">
+          <div class="brand-logo">
+            <span class="eye-icon">🎨</span>
+          </div>
+          <div class="brand-text">
+            <h1 class="game-title">COLOR <span class="accent-text">RUSH</span></h1>
+            <span class="game-subtitle">OPTICAL GAUNTLET</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Quick Game Switcher -->
+      <nav class="arcade-nav-tabs">
+        <a href="/" class="arcade-tab-btn" title="Play Don't Blink">
+          <span>⚡ Don't Blink</span>
+        </a>
+        <a href="/color-rush" class="arcade-tab-btn active" title="Play Color Rush">
+          <span>🎨 Color Rush</span>
+          <span class="tab-tag">Game 2</span>
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Rival challenge notification if URL contains vs -->
+        <div id="challenge-badge" class="challenge-pill hidden" title="Rival Target">
+          <span class="pulse-dot"></span>
+          <span id="challenge-badge-text">Target: Lvl 28</span>
+        </div>
+
+        <button id="btn-sound" class="icon-btn" aria-label="Toggle Sound" title="Toggle Sound">
+          <svg id="sound-icon-on" class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <svg id="sound-icon-off" class="svg-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+
+        <button id="btn-leaderboard-modal" class="icon-btn" aria-label="View Hall of Fame" title="Leaderboard">
+          <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+            <path d="M4 22h16"></path>
+            <path d="M10 14.66V17c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-2.34"></path>
+            <path d="M18 14.66V17c0 .55-.45 1-1 1h-2c-.55 0-1-.45-1-1v-2.34"></path>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Incoming Rival Banner -->
+    <div id="incoming-challenge-banner" class="rival-banner hidden">
+      <div class="rival-info">
+        <span class="rival-badge">🔥 RIVAL CHALLENGE</span>
+        <p class="rival-text"><strong id="challenger-name">Rival</strong> reached <span id="challenger-score" class="rival-highlight">Level 0</span>! Can you spot better?</p>
+      </div>
+      <button id="btn-accept-challenge" class="btn-sm btn-accent">Accept</button>
+    </div>
+
+    <!-- HUD Stats Bar -->
+    <div class="hud-stats-bar">
+      <div class="hud-stat-box">
+        <span class="hud-label">TIME LEFT</span>
+        <div class="timer-display-wrapper">
+          <span class="hud-val hud-timer" id="hud-timer">15.0</span>
+          <span class="hud-unit">s</span>
+        </div>
+      </div>
+
+      <div class="hud-stat-box score-accent">
+        <span class="hud-label">LEVEL</span>
+        <span class="hud-val hud-level" id="hud-level">1</span>
+      </div>
+
+      <div class="hud-stat-box">
+        <span class="hud-label">BEST LEVEL</span>
+        <span class="hud-val" id="hud-best">Lvl 0</span>
+      </div>
+    </div>
+
+    <!-- MAIN GAME ARENA -->
+    <main class="game-wrapper">
+      
+      <!-- Stage: Start / Intro -->
+      <div id="stage-intro" class="stage-overlay active">
+        <div class="intro-card">
+          <div class="intro-badge">GAME #2 IN ARCADE</div>
+          <h2 class="intro-title">SPOT THE ODD TILE</h2>
+          <p class="intro-desc">One tile in the grid has a slightly different shade. Tap it as fast as possible before the clock expires!</p>
+          <div class="rules-chips">
+            <span class="rule-chip">⏱️ +1.0s on correct tap</span>
+            <span class="rule-chip danger">⚠️ -3.0s on wrong tap</span>
+          </div>
+          <button id="btn-start" class="btn-huge btn-start">
+            <span>START RUSH</span>
+            <span class="btn-subtext">15 Seconds on the Clock</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stage: The Active Color Grid -->
+      <div id="grid-container" class="grid-container" role="grid" aria-label="Color Tile Grid">
+        <!-- Dynamically generated tile buttons -->
+      </div>
+
+    </main>
+
+    <!-- Google AdSense Sponsor Banner -->
+    <section class="ad-unit-wrapper" aria-label="Arcade Sponsor">
+      <div class="ad-unit-label">SPONSORED ARCADE PARTNER</div>
+      <div class="ad-unit-container">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-6998294085796300"
+             data-ad-slot="1234567890"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <div class="ad-placeholder-content">
+          <span class="ad-icon">🎨</span>
+          <div class="ad-copy">
+            <strong>COLOR RUSH OPTICAL BENCHMARK</strong>
+            <span>Support free arcade gaming • Test rods & cones</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-links">
+        <a href="/" class="footer-link-btn">⚡ Don't Blink</a>
+        <span class="footer-dot">•</span>
+        <button id="btn-open-privacy" class="footer-link-btn">Privacy Policy</button>
+        <span class="footer-dot">•</span>
+        <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" class="footer-link-btn">Ad Settings</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 DON'T BLINK ARCADE. Powered by Vercel.</p>
+    </footer>
+
+    <!-- FINAL GAME RESULT MODAL -->
+    <div id="game-over-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-final-title">
+      <div class="modal-card result-card-frame">
+        
+        <div class="result-header">
+          <span class="modal-kicker">TIME'S UP!</span>
+          <h2 id="modal-final-title" class="result-title">OPTICAL PERFORMANCE</h2>
+        </div>
+
+        <div class="result-hero-box">
+          <div class="score-main">
+            <span class="score-label">FINAL LEVEL</span>
+            <div class="score-number-row">
+              <span class="score-giant" id="final-level">28</span>
+            </div>
+            <div class="new-pb-badge hidden" id="new-pb-badge">🔥 NEW RECORD!</div>
+          </div>
+
+          <div class="rank-card">
+            <div class="rank-icon" id="final-rank-icon">🦅</div>
+            <div class="rank-details">
+              <div class="rank-tier" id="final-rank-tier">TIER S</div>
+              <div class="rank-title" id="final-rank-title">EAGLE VISION</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Benchmark Comparison -->
+        <div class="benchmark-pill">
+          <div class="comparison-icon">👁️</div>
+          <div class="comparison-text">
+            <strong id="final-percentile">Top 4% Optical Discrimination</strong>
+            <span class="benchmark-source">Average human fails around Level 18</span>
+          </div>
+        </div>
+
+        <blockquote class="sassy-quote" id="final-sassy-msg">
+          "Your retina detects microscopic wavelength shifts with predatory accuracy."
+        </blockquote>
+
+        <!-- Viral Share Grid -->
+        <div class="social-share-section">
+          <div class="share-title">CHALLENGE FRIENDS TO BEAT YOUR LEVEL</div>
+          
+          <div class="share-actions-grid">
+            <button id="btn-share-whatsapp" class="btn-share btn-whatsapp">
+              <svg class="share-svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.301-.15-1.78-.878-2.056-.978-.276-.101-.477-.15-.678.15-.2.301-.778.978-.954 1.179-.176.2-.351.226-.652.075-.301-.151-1.27-.468-2.42-1.493-.894-.798-1.498-1.784-1.674-2.085-.176-.301-.019-.464.132-.614.136-.135.301-.351.452-.527.15-.176.2-.301.301-.502.101-.2.05-.376-.025-.526-.076-.151-.678-1.632-.93-2.235-.245-.588-.495-.508-.679-.517l-.578-.01c-.2 0-.527.075-.803.376-.276.301-1.054 1.03-1.054 2.512 0 1.482 1.079 2.912 1.23 3.113.15.2 2.123 3.242 5.144 4.547.719.311 1.28.497 1.718.636.722.23 1.379.197 1.9.12.58-.088 1.78-.727 2.03-1.428.252-.702.252-1.303.176-1.428-.075-.125-.276-.2-.577-.351z"/>
+                <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2.05 21.95l4.908-1.287A9.956 9.956 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18.17a8.128 8.128 0 0 1-4.148-1.134l-.297-.176-3.082.809.822-3.003-.193-.308A8.138 8.138 0 0 1 3.83 12c0-4.505 3.665-8.17 8.17-8.17 4.505 0 8.17 3.665 8.17 8.17 0 4.505-3.665 8.17-8.17 8.17z"/>
+              </svg>
+              <span>WhatsApp</span>
+            </button>
+
+            <button id="btn-challenge-friend" class="btn-share btn-challenge">
+              <svg class="share-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="5" r="3"></circle>
+                <circle cx="6" cy="12" r="3"></circle>
+                <circle cx="18" cy="19" r="3"></circle>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+              </svg>
+              <span id="challenge-btn-text">Copy Duel Link</span>
+            </button>
+
+            <button id="btn-download-card" class="btn-share btn-save-card">
+              <svg class="share-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Result Card</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-footer-actions">
+          <button id="btn-rematch" class="btn-huge btn-rematch">
+            <span>PLAY AGAIN</span>
+          </button>
+          <a href="/" class="btn-outline text-center">
+            <span>Play Don't Blink &rarr;</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboard-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="lb-title">
+      <div class="modal-card">
+        <div class="modal-card-header">
+          <h2 id="lb-title" class="modal-title">🏆 OPTICAL LEADERBOARD</h2>
+          <button class="modal-close-btn" data-close="leaderboard-modal">&times;</button>
+        </div>
+        <div class="leaderboard-table-container">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Level</th>
+                <th>Optical Rank</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-tbody"></tbody>
+          </table>
+          <div id="leaderboard-empty" class="empty-state hidden">
+            <span class="empty-icon">🎨</span>
+            <p>No games yet. Reach level 10+ to post your first score!</p>
+          </div>
+        </div>
+        <div class="modal-card-footer">
+          <button class="btn-primary" data-close="leaderboard-modal">Done</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacy-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="priv-title">
+      <div class="modal-card">
+        <div class="modal-card-header">
+          <h2 id="priv-title" class="modal-title">🛡️ PRIVACY POLICY</h2>
+          <button class="modal-close-btn" data-close="privacy-modal">&times;</button>
+        </div>
+        <div class="policy-content">
+          <h3>Information We Collect</h3>
+          <p>Color Rush scores are saved locally on your device via <code>localStorage</code>. No personal identification data is stored on external servers.</p>
+          <h3>Google AdSense Advertising</h3>
+          <p>This website displays Google AdSense advertising. Google uses cookies to serve ads based on your visits to this or other websites. You can opt out at <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>.</p>
+        </div>
+        <div class="modal-card-footer">
+          <button class="btn-primary" data-close="privacy-modal">Got It</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast-container hidden" role="status" aria-live="polite">
+      <span class="toast-icon" id="toast-icon">✨</span>
+      <span class="toast-message" id="toast-msg">Duel link copied!</span>
+    </div>
+
+  </div>
+
+  <canvas id="share-card-canvas" width="1200" height="675" style="display:none;"></canvas>
+
+  <script src="color-rush.js"></script>
+</body>
+</html>

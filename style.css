@@ -1810,3 +1810,44 @@ html, body {
   font-family: var(--font-mono);
   font-size: 0.82rem;
 }
+
+/* Arcade Navigation Tabs */
+.arcade-nav-tabs {
+  display: flex;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 3px;
+  gap: 4px;
+}
+.arcade-tab-btn {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+}
+.arcade-tab-btn:hover {
+  color: #fff;
+}
+.arcade-tab-btn.active {
+  background: rgba(0, 255, 102, 0.15);
+  border: 1px solid var(--neon-green);
+  color: #fff;
+  box-shadow: 0 0 12px var(--neon-green-glow);
+}
+.tab-tag {
+  font-size: 0.62rem;
+  background: var(--neon-green);
+  color: #000;
+  font-weight: 900;
+  padding: 1px 5px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
