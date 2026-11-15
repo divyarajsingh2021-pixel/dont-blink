@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090a0f">
+  
+  <title>About Us — DON'T BLINK Cognitive Reflex Arcade & Benchmarking Lab</title>
+  <meta name="description" content="Learn about the DON'T BLINK project, our scientific methodology for measuring human visual reaction time, working memory, and sensory-motor coordination.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="content.css">
+</head>
+<body data-theme="cyber">
+
+  <div class="ambient-glow" aria-hidden="true"></div>
+
+  <div class="app-container content-page-container">
+    
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <a href="/" class="brand-link" title="Arcade Home">
+          <div class="brand-logo"><span class="eye-icon">⚡</span></div>
+          <div class="brand-text">
+            <h1 class="game-title">DON'T <span class="accent-text">BLINK</span></h1>
+            <span class="game-subtitle">COGNITIVE LAB</span>
+          </div>
+        </a>
+      </div>
+
+            <!-- Complete 10-Game Switcher -->
+      <nav class="arcade-nav-tabs">
+        <a href="/" class="arcade-tab-btn"><span>⚡ Don't Blink</span></a>
+        <a href="/color-rush" class="arcade-tab-btn"><span>🎨 Color Rush</span></a>
+        <a href="/perfect-10" class="arcade-tab-btn"><span>⏱️ Perfect 10</span></a>
+        <a href="/target-blitz" class="arcade-tab-btn"><span>🎯 Target Blitz</span></a>
+        <a href="/chimp-memory" class="arcade-tab-btn"><span>🧠 Chimp Memory</span></a>
+        <a href="/typing-blitz" class="arcade-tab-btn"><span>⌨️ Typing Blitz</span></a>
+        <a href="/math-sprint" class="arcade-tab-btn"><span>🔢 Math Sprint</span></a>
+        <a href="/stack-tower" class="arcade-tab-btn"><span>🏗️ Stack Tower</span></a>
+        <a href="/pattern-simon" class="arcade-tab-btn"><span>🔮 Pattern Simon</span></a>
+        <a href="/stealth-dodge" class="arcade-tab-btn"><span>🚀 Stealth Dodge</span></a>
+      </nav>
+    </header>
+
+    <main class="content-card">
+      <span class="editorial-kicker">MISSION & METHODOLOGY</span>
+      <h1>About the DON'T BLINK Cognitive Arcade</h1>
+      <p>Welcome to <strong>DON'T BLINK</strong>, an independent online psychomotor benchmarking platform and web arcade created to measure, track, and improve human cognitive reaction speeds, optical discrimination, working memory capacity, and motor precision.</p>
+
+      <h2>Our Core Mission</h2>
+      <p>In modern digital environments—from esports and competitive gaming to surgical operations, driving, and high-frequency knowledge work—human sensory processing latency represents a fundamental cognitive bottleneck. Traditional psychometric testing tools are often locked behind proprietary academic software or paywalled research labs.</p>
+      <p>Our mission is to democratize high-precision psychomotor testing through accessible, lightweight, and engaging web browser experiences that run smoothly on any device without installations, paywalls, or tracking bloat.</p>
+
+      <h2>The Science of Our Benchmarks</h2>
+      <p>Each of our arcade modules isolates a specific neurological or sensory-motor pathway:</p>
+      <ul>
+        <li><strong>Simple Visual Reaction Time (DON'T BLINK):</strong> Evaluates phototransduction delay in the retinal photoreceptors, signal transmission through the optic nerve to the visual cortex, prefrontal processing, and efferent motor signal propagation to the finger muscles. Measured using the sub-millisecond precision <code>performance.now()</code> High Resolution Time API.</li>
+        <li><strong>Optical Contrast Discrimination (Color Rush):</strong> Tests cone photoreceptor sensitivity and chromatic contrast thresholds under escalating time constraints.</li>
+        <li><strong>Internal Chronometry (Perfect 10):</strong> Analyzes the human internal neural pacemaker and sub-second interval timing without external auditory or visual cues.</li>
+        <li><strong>Dynamic Aim Coordination (Target Blitz):</strong> Implements Fitts's Law to benchmark ballistic spatial motor movements and peripheral visual tracking.</li>
+        <li><strong>Working Memory Capacity (Chimp Memory):</strong> Replicates the Kyoto University Primate Research Institute paradigm to evaluate visuo-spatial eidetic memory and transient recall.</li>
+        <li><strong>Biomechanical Motor Cadence (Typing Blitz):</strong> Gauges linguistic cognitive decoding speed, finger fluidity, and error-correction latencies under time limits.</li>
+        <li><strong>Rapid Numerical Decisions (Math Sprint):</strong> Measures parietal cortex mathematical processing and working memory pressure under 2-second windows.</li>
+        <li><strong>Predictive Rhythm Stacking (Stack Tower):</strong> Analyzes temporal synchronization, moving target estimation, and motor anticipation precision.</li>
+      </ul>
+
+      <h2>Hardware Latency & Measurement Integrity</h2>
+      <p>Every digital measurement tool faces hardware latency: screen refresh cycles (e.g. 16.6ms on 60Hz displays vs 4.1ms on 240Hz displays), OS input polling rates, and browser event loop dispatch intervals. DON'T BLINK utilizes timestamp differential logging via <code>performance.now()</code> and direct hardware event listeners to minimize software overhead to less than 1 millisecond.</p>
+
+      <h2>Zero Audio Bloat & Offline-First Design</h2>
+      <p>We believe in high-performance web development. All audio effects across the arcade are synthesized dynamically in real-time using the Web Audio API oscillators—meaning our games load instantly, consume minimal bandwidth, and run completely offline without downloading heavy MP3/WAV files.</p>
+
+      <h2>Editorial Standards & Team</h2>
+      <p>DON'T BLINK is actively maintained by an independent group of software engineers, cognitive science enthusiasts, and web game developers. We continuously update our norms and percentiles based on aggregated anonymous gameplay data to provide the most accurate real-world benchmarks.</p>
+
+      <div class="contact-box">
+        <h3>Questions or Research Inquiries?</h3>
+        <p>If you are a researcher, educator, or developer interested in our benchmark data or wishing to report an issue, please reach out via our <a href="/contact" style="color:var(--neon-green); font-weight:700;">Contact Page</a>.</p>
+      </div>
+    </main>
+
+        <!-- Standard AdSense Compliant Footer -->
+    <footer class="app-footer">
+      <div class="footer-links">
+        <a href="/" class="footer-link-btn">Home</a>
+        <span class="footer-dot">•</span>
+        <a href="/about" class="footer-link-btn">About Us</a>
+        <span class="footer-dot">•</span>
+        <a href="/privacy" class="footer-link-btn">Privacy Policy</a>
+        <span class="footer-dot">•</span>
+        <a href="/terms" class="footer-link-btn">Terms of Service</a>
+        <span class="footer-dot">•</span>
+        <a href="/contact" class="footer-link-btn">Contact</a>
+        <span class="footer-dot">•</span>
+        <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" class="footer-link-btn">Google Ad Settings</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 DON'T BLINK ARCADE. Powered by Vercel.</p>
+    </footer>
+
+  </div>
+</body>
+</html>
