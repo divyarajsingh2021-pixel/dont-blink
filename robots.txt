@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Host
+Host: https://dont-blink-two.vercel.app
+
+# Sitemap
+Sitemap: https://dont-blink-two.vercel.app/sitemap.xml
